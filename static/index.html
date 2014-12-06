@@ -34,37 +34,68 @@
             };
         };
         
+        function TileSheetFactory(key, path, cols, rows, size) {
+            size = size || 32;
+            
+            this.preload = function () {
+                game.load.spritesheet(key, path, size, size);
+            }
+            
+            this.generateSprite = function(x, y, i, j) {
+                var index = i + j * cols;
+                if (i + j * cols > cols * rows - 1) {
+                    return undefined;
+                }
+                var s = game.add.sprite(x, y, key, i + j * cols);
+                    s.anchor.setTo(0, 0);
+                return s;
+            }
+        }
         
+        function TilesAssets (prefix) {
+            prefix = prefix || 'land_';
+
+            this.tilesFactory = {
+                'coldwatergrass': new TileSheetFactory(prefix + 'coldwatergrass', 'assets/coldwatergrass.png', 5, 6),
+                'icegrass': new TileSheetFactory(prefix + 'icegrass', 'assets/icegrass.png', 5, 6),
+                'plowed_soil': new TileSheetFactory(prefix + 'plowed_soil', 'assets/plowed_soil.png', 5, 6),
+                'tallgrass': new TileSheetFactory(prefix + 'tallgrass', 'assets/tallgrass.png', 5, 6),
+                'wheat': new TileSheetFactory(prefix + 'wheat', 'assets/wheat.png', 5, 6),
+            };
+            
+            this.preload = function () {
+                for (var k in this.tilesFactory) {
+                    this.tilesFactory[k].preload();
+                }
+            }
+        };
+        
+        var landscapeAssets = new TilesAssets();
 
         function preload () {
-            game.load.spritesheet('land_coldwatergrass', 'assets/coldwatergrass.png', 32, 32);
-            game.load.spritesheet('land_icegrass', 'assets/icegrass.png', 32, 32);
-            game.load.spritesheet('land_plowed_soil', 'assets/plowed_soil.png', 32, 32);
-            game.load.spritesheet('land_tallgrass', 'assets/tallgrass.png', 32, 32);
-            game.load.spritesheet('land_wheat', 'assets/wheat.png', 32, 32);
-            
-            
+            landscapeAssets.preload();
             gui.preload();
-            
         }
 
         function create () {
             terrain = game.add.group();
             
-            // terrain.create.
-            
             gui.create();
-            
-            // var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-            // logo.anchor.setTo(0.5, 0.5);
             
             for (var i = 0; i < 5; i++) {
                 for (var j = 0; j < 6; j++) {
-                    var s = game.add.sprite(game.world.centerX + i * 32, 
-                        game.world.centerY + j * 32, 'land_coldwatergrass', i + j * 5);
-                    s.anchor.setTo(0.5, 0.5);
+                    landscapeAssets.tilesFactory['coldwatergrass'].generateSprite(game.world.centerX + i * 32, 
+                        game.world.centerY + j * 32, i, j);
                 }
             }
+            
+            // for (var i = 0; i < 5; i++) {
+            //     for (var j = 0; j < 6; j++) {
+            //         var s = game.add.sprite(game.world.centerX + i * 32, 
+            //             game.world.centerY + j * 32, 'land_coldwatergrass', i + j * 5);
+            //         s.anchor.setTo(0.5, 0.5);
+            //     }
+            // }
         }
         
         function update() {
