@@ -8,7 +8,8 @@ copy: {
     files: [
       // includes files within path and its sub-directories
       {expand: true, src: ['static/**'], dest: process.env.HOME + '/Web/'},
-
+      {expand: true, src: ['client/**'], dest: process.env.HOME + '/Web/'},
+      {expand: true, src: ['shared/**'], dest: process.env.HOME + '/Web/'},
       {expand: true, src: ['bower_components/**'], dest: process.env.HOME + '/Web/'}
     ],
   },

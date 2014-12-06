@@ -2,105 +2,16 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>hello phaser!</title>
+        <title>NumberCommander</title>
         <script src="/bower_components/phaser/build/phaser.js"></script>
+        <script src="/client/assets.js"></script>
+        <script src="/client/renderer.js"></script>
+        <script src="/client/ui.js"></script>
+        <script src="/shared/terrain.js"></script>
+        
+        <script src="/client/game.js"></script>
     </head>
     <body>
-    
-    <script type="text/javascript"> <!-- todo: extract to separate file: client.js -->
-        function GameUI(game) {
-            var ui = this;
-            
-            this.preload = function () {
-                
-            };
-            
-            this.create = function() {
-                ui.score = 0;
-                ui.scoreText = game.add.text(16, 16, 'score: 0',  { fontSize: '32px', fill: '#000' });
-            };
-            
-            this.update = function () {
-                
-            };
-        };
-        
-        function TileSheetFactory(game, key, path, cols, rows, size) {
-            size = size || 32;
-            
-            this.preload = function () {
-                game.load.spritesheet(key, path, size, size);
-            }
-            
-            this.generateSprite = function(x, y, i, j) {
-                var index = i + j * cols;
-                if (i + j * cols > cols * rows - 1) {
-                    return undefined;
-                }
-                var s = game.add.sprite(x, y, key, i + j * cols);
-                    s.anchor.setTo(0, 0);
-                return s;
-            }
-        }
-        
-        function TilesAssets (game, prefix) {
-            prefix = prefix || 'land_';
-
-            this.tilesFactory = {
-                'coldwatergrass': new TileSheetFactory(game, prefix + 'coldwatergrass', 'assets/coldwatergrass.png', 5, 6),
-                'icegrass': new TileSheetFactory(game, prefix + 'icegrass', 'assets/icegrass.png', 5, 6),
-                'plowed_soil': new TileSheetFactory(game, prefix + 'plowed_soil', 'assets/plowed_soil.png', 5, 6),
-                'tallgrass': new TileSheetFactory(game, prefix + 'tallgrass', 'assets/tallgrass.png', 5, 6),
-                'wheat': new TileSheetFactory(game, prefix + 'wheat', 'assets/wheat.png', 5, 6),
-            };
-            
-            this.preload = function () {
-                for (var k in this.tilesFactory) {
-                    this.tilesFactory[k].preload();
-                }
-            }
-        };        
-        
-    </script>
-    
-
-    <script type="text/javascript">
-
-    window.onload = function() {
-
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
-        
-        var gui = new GameUI(game);
-       
-        var terrain;
-        var landscapeAssets = new TilesAssets(game);
-
-        function preload () {
-            landscapeAssets.preload();
-            gui.preload();
-        }
-
-        function create () {
-            terrain = game.add.group();
-            
-            gui.create();
-            
-            for (var i = 0; i < 5; i++) {
-                for (var j = 0; j < 6; j++) {
-                    landscapeAssets.tilesFactory['icegrass'].generateSprite(game.world.centerX + i * 32, 
-                        game.world.centerY + j * 32, i, j);
-                }
-            }
-        }
-        
-        function update() {
-            
-            gui.update();
-        }
-
-    };
-
-    </script>
 
     </body>
 </html>
